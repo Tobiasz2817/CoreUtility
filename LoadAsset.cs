@@ -1,10 +1,11 @@
-using UnityEngine.AddressableAssets;
+#if Unity_Adressable
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoreUtility.Extensions;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace CoreUtility {
     public static class AddressableLoad {
@@ -99,8 +100,11 @@ namespace CoreUtility {
         }
     }
     
+        
     public enum SearchType {
         Inside,
         Value
     }
+
 }
+#endif

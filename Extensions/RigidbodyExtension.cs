@@ -14,14 +14,14 @@ namespace CoreUtility.Extensions {
         
         public static bool SetVelocity(this Rigidbody2D rigidbody2D, float? x = null, float? y = null, bool condition = true) {
             if (condition) {
-                var vel = rigidbody2D.velocity;
+                var vel = rigidbody2D.linearVelocity;
                 var xVal = x ?? vel.x;
                 var yVal = y ?? vel.y;
                 
                 if (Mathf.Approximately(vel.x, xVal) && Mathf.Approximately(vel.y, yVal))
                     return false;
                 
-                rigidbody2D.velocity = new Vector2(xVal, yVal);
+                rigidbody2D.linearVelocity = new Vector2(xVal, yVal);
             }
 
             return condition;
