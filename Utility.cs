@@ -29,6 +29,8 @@ namespace CoreUtility {
             (int)normal.x,
             normal.y < -collisionThreshold);
         
+        // TODO: Obsolete in unity 6
+        [Obsolete("Obsolete")]
         public static bool TryAddDefineSymbol(string symbolName) {
             var buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
             var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);

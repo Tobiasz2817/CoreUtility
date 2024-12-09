@@ -22,7 +22,16 @@ namespace CoreUtility {
             
             var assemblies = new List<Assembly>();
             foreach (var assemblyName in assembliesName) {
-                var assembly = Assembly.Load(assemblyName);
+                Assembly assembly = null;
+                try
+                {
+                    assembly = Assembly.Load(assemblyName);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+                
                 if (assembly == null) {
 #if UNITY_EDITOR
                     Debug.LogWarning("Didn't find assemblyName: " + assembliesName + 
