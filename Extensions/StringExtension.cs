@@ -31,7 +31,7 @@ namespace CoreUtility.Extensions
             return index > 0 ? text.Substring(0, index) + " " + text.Substring(index) : text;
         }
         
-        #region JsonFormatting
+        #region Custom JsonFormatting
         static string FormatLine(string data) =>  "    " + data + ",";
         static string FormatToJson<T>(string key, T newValue) => $"{key}: {newValue}";
         static string ChangeKeyName(string jsonValue, string key) => ChangeName(jsonValue, "Value", key);
