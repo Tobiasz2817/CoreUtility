@@ -15,9 +15,9 @@ namespace CoreUtility {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Inject() {
             var assembliesName = new[] {
-                "CharControl",
+                "CharControl2D",
                 "Ability",
-                "InputFlow",
+                "Inflowis",
             };
             
             var assemblies = new List<Assembly>();

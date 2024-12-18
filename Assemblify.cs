@@ -7,16 +7,16 @@ using System.IO;
 
 namespace CoreUtility {
     public class Assemblify : MonoBehaviour {
-        static Dictionary<string, string[]> _assemblies = new(){
-            // provided assembly - which reference want the assembly
-            {"CoreUtility", new []{"Signals", "Ability", "CharControl2D", "Inflowis", "Tools", "Storex"}}, 
-            {"Signals", new []{"Ability", "CharControl2D"}},
-            {"Storex", new []{"Ability"}},
-        };
-        
         [MenuItem("Tools/ScanAssemblies")]
         static void ScanAssemblies() {
-            foreach (var assembly in _assemblies) {
+            Dictionary<string, string[]> assemblies = new(){
+                // provided assembly - which reference want the assembly
+                {"CoreUtility", new []{"Signals", "Ability", "CharControl2D", "Inflowis", "Tools", "Storex"}}, 
+                {"Signals", new []{"Ability", "CharControl2D"}},
+                {"Storex", new []{"Ability"}},
+            };
+            
+            foreach (var assembly in assemblies) {
                 var path = GetAssemblyPath(assembly.Key);
                 if (string.IsNullOrEmpty(path)) {
                     Debug.LogWarning($"Didn't find the assembly definition asset of name: {assembly.Key}");
