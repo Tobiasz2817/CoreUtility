@@ -1,11 +1,10 @@
-#if Unity_Adressable
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoreUtility.Extensions;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+//using UnityEngine.AddressableAssets;
 
 namespace CoreUtility {
     public static class AddressableLoad {
@@ -13,18 +12,19 @@ namespace CoreUtility {
         /// <param name="parameters"> The list of wanted to paramters (strings/ReferenceLabelAssets)</param>
         /// <returns> List of the wanted references </returns>
         [Tooltip("Importing all data from the entry path")]
-        public static async Task<List<T>> Import<T>(SearchType searchType = SearchType.Value, params object[] parameters) {
+        public static async Task<List<T>> Import<T>(SearchType searchType =
+ SearchType.Value, params object[] parameters) {
             var list = new List<T>();
             var tasks = new List<Task>();
             
             switch (searchType) {
                 case SearchType.Value: {
                     foreach (var target in parameters) {
-                        var handle = Addressables.LoadAssetsAsync<T>(target, (obj => {
+                        /*var handle = Addressables.LoadAssetsAsync<T>(target, (obj => {
                             list.Add(obj);
                         }));
                         
-                        tasks.Add(handle.Task);
+                        tasks.Add(handle.Task);*/
                     }
                     
                     break;
@@ -34,7 +34,7 @@ namespace CoreUtility {
                     var membersFlag = MemberTypes.Field | MemberTypes.Property;
 
                     foreach (var target in parameters) {
-                        var handle = Addressables.LoadAssetsAsync<Object>(target, (obj) => {
+                        /*var handle = Addressables.LoadAssetsAsync<Object>(target, (obj) => {
                             var providerMembers = obj.GetMembers(membersFlag, insideFlags);
                 
                             foreach (var member in providerMembers) {
@@ -44,7 +44,7 @@ namespace CoreUtility {
                             }
                         });
 
-                        tasks.Add(handle.Task);
+                        tasks.Add(handle.Task);*/
                     }
                     break;
                 }
@@ -99,12 +99,9 @@ namespace CoreUtility {
             return list;
         }
     }
-    
-        
+
     public enum SearchType {
         Inside,
         Value
     }
-
 }
-#endif

@@ -42,6 +42,18 @@ namespace CoreUtility.Extensions {
             return newArray;
         }
         
+        public static T[] AddRange<T>(this T[] array, params T[] values) {
+            var newArray = new T[array.Length + values.Length];
+
+            for (var i = 0; i < array.Length; i++) 
+                newArray[i] = array[i];
+
+            for (var i = array.Length; i < newArray.Length; i++) 
+                newArray[i] = values[i - array.Length];
+
+            return newArray;
+        }
+        
         public static bool IsOutOfRange<T>(this T[] array, int index) {
             return index >= array.Length || index < 0;
         }

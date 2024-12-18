@@ -1,41 +1,57 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using CoreUtility.Extensions;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace CoreUtility {
     public class Assemblify : MonoBehaviour {
-        string[,] _assemblies = new[,]{
+        static Dictionary<string, string[]> _assemblies = new(){
             // Wanted - Target 
-            {"CoreUtility", "Signals"}, 
-            {"CoreUtility", "Ability"}, 
-            {"CoreUtility", "CharControl2D"}, 
-            {"CoreUtility", "Inflowis"}, 
-            {"CoreUtility", "Tools"}, 
+            {"CoreUtility", new []{"Signals", "Ability", "CharControl2D", "Inflowis", "Tools", "Storex"}}, 
+            {"Signals", new []{"Ability", "CharControl2D"}},
+            {"Storex", new []{"Ability"}},
         };
         
         [MenuItem("Tools/ScanAssemblies")]
         static void ScanAssemblies() {
-            var path = AssetDatabase.GUIDToAssetPath(            
-                AssetDatabase.FindAssets("CoreUtility t: AssemblyDefinitionAsset", null)[0]);
-
-            var obj = AssetDatabase.LoadAssetAtPath(path, typeof(AssemblyDefinitionAsset));
-
-            if (obj is AssemblyDefinitionAsset def) {
-                Debug.Log(def);
+            foreach (var assembly in _assemblies) {
+                var path = GetAssemblyPath(assembly.Key);
+                if (string.IsNullOrEmpty(path)) {
+                    Debug.LogWarning($"Didn't find the assembly definition asset of name: {assembly.Key}");
+                    continue;
+                }
                 
-                string assetPath = AssetDatabase.GetAssetPath(def);
-                string jsonContent = File.ReadAllText(assetPath);
+                string targetGuid = AssetDatabase.AssetPathToGUID(path);
+                foreach (var targetAssembly in assembly.Value) {
+                    string targetPath = GetAssemblyPath(targetAssembly);
+                    
+                    if (string.IsNullOrEmpty(targetPath)) {
+                        Debug.LogWarning($"Didn't find the assembly definition asset of name: {targetAssembly}");
+                        continue;
+                    }
 
-                jsonContent = jsonContent.Replace("\"references\": [", "\"references\": [\"GUID:newGuidHere\",");
-            
-                File.WriteAllText(assetPath, jsonContent);
-
-                AssetDatabase.Refresh();
-                EditorUtility.SetDirty(def);
-                AssetDatabase.SaveAssets();
+                    var jsonContent = File.ReadAllText(targetPath);
+                    var targetData = JsonUtility.FromJson<AssemblyDefinitionData>(jsonContent);
+                    if (targetData.references.Contains($"GUID:{targetGuid}"))
+                        continue;
+                    
+                    targetData.references = targetData.references.Add($"GUID:{targetGuid}");
+                    
+                    var json = JsonUtility.ToJson(targetData);
+                    File.WriteAllText(targetPath, json);
+                }
+                
             }
+            
+            AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
         }
+
+        static string GetAssemblyPath(string assemblyName) =>
+            AssetDatabase.GUIDToAssetPath(            
+                AssetDatabase.FindAssets($"{assemblyName} t: AssemblyDefinitionAsset", null).FirstOrDefault());
     }
     [System.Serializable]
     public class AssemblyDefinitionData
@@ -46,5 +62,4 @@ namespace CoreUtility {
         public string[] versionDefines;
         public bool allowUnsafeCode;
     }
-
 }
