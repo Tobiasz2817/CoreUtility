@@ -39,7 +39,7 @@ namespace CoreUtility {
                     
                     targetData.references = targetData.references.Add($"GUID:{targetGuid}");
                     
-                    var json = JsonUtility.ToJson(targetData);
+                    var json = JsonUtility.ToJson(targetData, true);
                     File.WriteAllText(targetPath, json);
                 }
                 
