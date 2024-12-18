@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using CoreUtility.Extensions;
 using UnityEditor;
+using System.Linq;
 using UnityEngine;
+using System.IO;
 
 namespace CoreUtility {
     public class Assemblify : MonoBehaviour {
         static Dictionary<string, string[]> _assemblies = new(){
-            // Wanted - Target 
+            // provided assembly - which reference want the assembly
             {"CoreUtility", new []{"Signals", "Ability", "CharControl2D", "Inflowis", "Tools", "Storex"}}, 
             {"Signals", new []{"Ability", "CharControl2D"}},
             {"Storex", new []{"Ability"}},
@@ -53,9 +53,11 @@ namespace CoreUtility {
             AssetDatabase.GUIDToAssetPath(            
                 AssetDatabase.FindAssets($"{assemblyName} t: AssemblyDefinitionAsset", null).FirstOrDefault());
     }
+    
+    //TODO: Add more parameters
+    // Without parameters on scanning remove others params
     [System.Serializable]
-    public class AssemblyDefinitionData
-    {
+    public class AssemblyDefinitionData {
         public string name;
         public string[] references;
         public string[] optionalUnityReferences;

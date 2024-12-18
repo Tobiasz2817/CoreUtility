@@ -4,8 +4,9 @@ using CoreUtility.Extensions;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-//using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets;
 
+// Assemblies: Unity.ResourceManager / Unity.Addressables;
 namespace CoreUtility {
     public static class AddressableLoad {
         /// <param name="searchType"> Inside: research the asset in side the class, value is the class </param>
@@ -20,11 +21,11 @@ namespace CoreUtility {
             switch (searchType) {
                 case SearchType.Value: {
                     foreach (var target in parameters) {
-                        /*var handle = Addressables.LoadAssetsAsync<T>(target, (obj => {
+                        var handle = Addressables.LoadAssetsAsync<T>(target, (obj => {
                             list.Add(obj);
                         }));
                         
-                        tasks.Add(handle.Task);*/
+                        tasks.Add(handle.Task);
                     }
                     
                     break;
@@ -34,7 +35,7 @@ namespace CoreUtility {
                     var membersFlag = MemberTypes.Field | MemberTypes.Property;
 
                     foreach (var target in parameters) {
-                        /*var handle = Addressables.LoadAssetsAsync<Object>(target, (obj) => {
+                        var handle = Addressables.LoadAssetsAsync<Object>(target, (obj) => {
                             var providerMembers = obj.GetMembers(membersFlag, insideFlags);
                 
                             foreach (var member in providerMembers) {
@@ -44,7 +45,7 @@ namespace CoreUtility {
                             }
                         });
 
-                        tasks.Add(handle.Task);*/
+                        tasks.Add(handle.Task);
                     }
                     break;
                 }
